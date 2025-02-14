@@ -3,9 +3,9 @@ import React from "react";
 
 const features = [
   {
-    title: "Collect user feedback",
+    title: "Collect student and alumni feedback",
     description:
-      "Use your Insighto's board to let users submit features they want.",
+      "We use our platform's feedback to allow users to suggest items and features they'd like to see available for purchase or sale.",
     styles: "bg-primary text-primary-content",
     demo: (
       <div className="overflow-hidden h-full flex items-stretch">
@@ -28,35 +28,35 @@ const features = [
               <span>Terms & privacy pages don&apos;t need them</span>
               <span className="w-[2px] h-6 bg-primary animate-pulse"></span>
             </div>
-            <button className="btn shadow-lg btn-primary absolute right-4 bottom-6 opacity-0 group-hover:opacity-100 duration-1000">
+            {/* <button className="btn shadow-lg btn-primary absolute right-4 bottom-6 opacity-0 group-hover:opacity-100 duration-1000">
               Submit
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
     ),
   },
   {
-    title: "Prioritize features",
-    description: "Users upvote features they want. You know what to ship next.",
+    title: "Prioritize popular listings",
+    description: "Users can upvote items they want to see on the marketplace, helping you decide which products should be featured next.",
     styles: "md:col-span-2 bg-base-300 text-base-content",
     demo: (
       <div className="px-6 max-w-[600px] flex flex-col gap-4 overflow-hidden">
         {[
           {
-            text: "Add LemonSqueezy integration to the boilerplate",
-            secondaryText: "Yes, ship this! ✅",
+            text: "Add used textbooks category",
+            secondaryText: "Yes, feature this! ✅",
             votes: 48,
             transition: "group-hover:-mt-36 group-hover:md:-mt-28 duration-500",
           },
           {
-            text: "A new pricing table for metered billing",
-            secondaryText: "Maybe ship this 🤔",
+            text: "Create a section for electronics",
+            secondaryText: "Maybe feature this 🤔",
             votes: 12,
           },
           {
-            text: "A new UI library for the dashboard",
-            secondaryText: "But don't ship that ❌",
+            text: "Include a local pickup option",
+            secondaryText: "But don't feature that ❌",
             votes: 1,
           },
         ].map((feature, i) => (
@@ -95,8 +95,8 @@ const features = [
     ),
   },
   {
-    title: "Your brand, your board",
-    description: "Customize your Insighto board with 7 themes.",
+    title: "Coming Soon : Personalize your site",
+    description: "Customize the website's theme to fit your style, and showcase the unique Clark University community vibe. Coming Soon.",
     styles: "md:col-span-2 bg-base-100 text-base-content",
     demo: (
       <div className="flex left-0 w-full h-full pt-0 lg:pt-8 overflow-hidden -mt-4">
@@ -186,15 +186,15 @@ const features = [
     ),
   },
   {
-    title: "Discover new ideas",
-    description: "Users can chat and discuss features.",
+    title: "Chat and discuss",
+    description: "Users can chat and discuss features and items they'd like to see on the platform.",
     styles: "bg-neutral text-neutral-content",
     demo: (
       <div className="text-neutral-content px-6 space-y-4">
         {[
           {
             id: 1,
-            text: "Can we have a feature to add a custom domain to IndiePage?",
+            text: "Can we add a feature to sell old textbooks?",
             userImg:
               "https://pbs.twimg.com/profile_images/1514863683574599681/9k7PqDTA_400x400.jpg",
             userName: "Marc Lou",
@@ -202,7 +202,7 @@ const features = [
           },
           {
             id: 2,
-            text: "I'd definitelly pay for that 🤩",
+            text: "I’d definitely pay for that 🤩",
             userImg:
               "https://pbs.twimg.com/profile_images/1778434561556320256/knBJT1OR_400x400.jpg",
             userName: "Dan K.",
@@ -219,7 +219,7 @@ const features = [
             <div className="text-neutral/80 flex items-center gap-2 text-sm">
               <div className="flex items-center gap-2">
                 <div className="avatar">
-                  <div className="w-7 rounded-full">
+                  <div className="w-7 rounded-sm">
                     <img src={reply.userImg} alt={reply.userName} />
                   </div>
                 </div>
@@ -240,12 +240,14 @@ const features = [
     ),
   },
 ];
+
+
 const FeaturesGrid = () => {
   return (
     <section className="flex justify-center items-center w-full bg-base-200/50 text-base-content py-20 lg:py-32">
       <div className="flex flex-col max-w-[82rem] gap-16 md:gap-20 px-4">
         <h2 className="max-w-3xl font-black text-4xl md:text-6xl tracking-[-0.01em]">
-          Ship features <br /> users{" "}
+          Clarkmart Features <br /> users{" "}
           <span className="underline decoration-dashed underline-offset-8 decoration-base-300">
             really want
           </span>
