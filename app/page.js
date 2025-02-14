@@ -1,6 +1,6 @@
 import Hero from "@/components/Hero";
 import Header from "@/components/Header";
-import FeaturesGrid from "@/components/FeaturesGrid";
+import FeaturesListicle from "@/components/FeaturesListicle";
 import Footer from "@/components/Footer";
 
 export default function Page() {
@@ -8,8 +8,12 @@ export default function Page() {
   return (
     <>
       <Header />
-      <Hero/>
-      <FeaturesGrid/>
+      <Hero
+        heading={'Genesis Automation ✨'}
+        description={'Genesis, your intelligent partner in healthcare automation. STOP TYPING, START TREATING...'}
+        btnLink={redirectLink}
+      />
+      <FeaturesListicle />
       <Footer />
     </>
   );
