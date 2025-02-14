@@ -7,7 +7,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      borderRadius: '0' ,
       backgroundImage: {
         gradient:
           "linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82)",
@@ -64,20 +63,6 @@ module.exports = {
     // You can add another theme among the list of 30+
     // Add "data-theme='theme_name" to any HTML tag to enable the 'theme_name' theme.
     // https://daisyui.com/
-    themes: [
-      {
-        mytheme: {
-          primary: "#cc0000", // Main red color
-          secondary: "#b30000", // Slightly darker red for secondary color
-          accent: "#ff4d4d", // Light red/pinkish accent
-          neutral: "#4b4b4b", // Grey for neutral elements
-          "base-100": "#ffffff", // White background
-          info: "#ff4d4d", // Light red for info elements
-          success: "#00cc00", // Green for success (you can modify if needed)
-          warning: "#ffaa00", // Yellow/orange for warnings
-          error: "#cc0000", // Red for error messages
-        },
-      },
-    ],
+    themes: ["light", "dark"],
   },
 };
