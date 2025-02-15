@@ -5,7 +5,7 @@ const config = {
   appName: "Clarkmart",
   // REQUIRED: a short description of your app for SEO tags (can be overwritten)
   appDescription:
-    "Genesis, your intelligent partner in healthcare automation - STOP TYPING, START TREATING...",
+    "Your one stop shop for stationary, books and electronics",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
   domainName: "clark-amber.vercel.app",
   crisp: {

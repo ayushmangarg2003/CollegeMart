@@ -12,12 +12,13 @@ const Hero = () => {
         <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4">
           Best Marketplace for Clark Students 
         </h1>
+        
         <p className="text-lg opacity-80 leading-relaxed">
           Buy and sell books, stationary, electronics and many more to your peers with ease, now in a few clicks
         </p>
         <div className="flex flex-col">{cta}</div>
-
         <TestimonialsAvatars priority={true} />
+
       </div>
       <div className="lg:w-full">
         <Image

@@ -7,7 +7,7 @@ export default function Page() {
   const redirectLink = "/signin"
   return (
     <>
-      <Header />
+      <Header/>
       <Hero/>
       <FeaturesGrid/>
       <Footer />
