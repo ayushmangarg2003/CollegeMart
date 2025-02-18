@@ -75,7 +75,7 @@ export default function Marketplace() {
       </div>
 
       {/* Center the tags filter */}
-      <div className="w-full flex justify-center mt-6">
+      <div className="w-full flex justify-center ">
         <TagsFilter
           tags={["ALL", "Books", "Games", "Electronics", "Home"]}
           selectedTag={selectedTag}

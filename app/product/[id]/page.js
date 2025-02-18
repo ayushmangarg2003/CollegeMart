@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { dummyData } from "@/libs/dummyData"; // Corrected import path
 import { useParams } from "next/navigation";
 
