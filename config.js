@@ -32,7 +32,7 @@ const config = {
   },
   auth: {
     loginUrl: "/signin",
-    callbackUrl: "/dashboard",
+    callbackUrl: "/marketplace",
   },
 };
 
