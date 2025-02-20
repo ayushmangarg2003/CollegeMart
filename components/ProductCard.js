@@ -31,7 +31,7 @@ const ProductCard = ({ product }) => {
             
             <div className="mt-2 flex justify-between items-center">
               <p className="text-lg font-bold text-[#cc0000]">
-                {product.price}
+                ${product.price}
               </p>
               <span className="text-sm text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 View Details
