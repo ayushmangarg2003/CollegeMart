@@ -6,6 +6,9 @@ import ButtonAccount from "@/components/ButtonAccount";
 import ProductCard from "@/components/ProductCard";
 import { Loader } from "lucide-react";
 import Link from "next/link";
+import config from "@/config";
+import logo from "@/app/icon.png";
+import Image from "next/image";
 
 const dummyProducts = [
   {
@@ -87,16 +90,28 @@ const Profile = () => {
   return (
     <main className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="border-b border-neutral-100">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-4">
-          <div className="flex items-center justify-between">
-            <a href="/" className="text-xl font-semibold text-[#cc0000]">
-              ClarkMart
-            </a>
-            <ButtonAccount />
-          </div>
-        </div>
-      </nav>
+      <div className="bg-base-200 flex justify-center">
+        <header className="bg-base-200 max-w-7xl bg-base-100 w-full flex justify-between py-4">
+          <Link
+            className="flex items-center gap-2 shrink-0 "
+            href="/"
+            title={`${config.appName} homepage`}
+          >
+            <Image
+              src={logo}
+              alt={`${config.appName} logo`}
+              className="w-8"
+              placeholder="blur"
+              priority={true}
+              width={32}
+              height={32}
+            />
+            <span className="font-extrabold text-lg">{config.appName}</span>
+          </Link>
+
+          <ButtonAccount />
+        </header>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-12">
         {/* User Profile Info */}
