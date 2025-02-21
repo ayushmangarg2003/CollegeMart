@@ -129,7 +129,7 @@ const Profile = () => {
           ) : (
             <div className="text-center py-16 bg-neutral-50">
               <p className="text-lg text-neutral-600">
-                You haven't listed any products yet.
+                You have not listed any products yet.
               </p>
             </div>
           )}
