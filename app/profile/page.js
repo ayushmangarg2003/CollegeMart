@@ -114,10 +114,7 @@ const Profile = () => {
               Your Listed Products
             </h2>
             <Link href="/add">
-              <button
-                className="text-[#cc0000] hover:text-[#b30000] font-medium"
-                onClick={() => alert("Add new product")}
-              >
+              <button className="text-[#cc0000] hover:text-[#b30000] font-medium">
                 + Add New Product
               </button>
             </Link>
