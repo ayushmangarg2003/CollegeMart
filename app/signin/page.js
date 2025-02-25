@@ -53,7 +53,7 @@ export default function Login() {
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Navigation */}
       <nav className="p-4">
-        <Link 
+        <Link
           href="/" 
           className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
         >

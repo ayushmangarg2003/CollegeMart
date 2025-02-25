@@ -149,7 +149,9 @@ const ProductDetails = () => {
                 Message Seller
               </button>
             </div>
+            
           </div>
+
         </div>
       </div>
     </main>
