@@ -1,27 +1,46 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { dummyData } from "@/libs/dummyData";
+import { supabase } from "@/libs/supabase/client"; // Import Supabase client
 import { useParams } from "next/navigation";
-import { Calendar, MessageCircle, Clock, MapPin, Tag, Loader } from 'lucide-react';
+import {
+  Calendar,
+  MessageCircle,
+  Clock,
+  MapPin,
+  Tag,
+  Loader,
+} from "lucide-react";
 
 const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const params = useParams();
 
   useEffect(() => {
     if (!params.id) return;
 
-    const fetchProduct = () => {
+    const fetchProduct = async () => {
       try {
+        setLoading(true);
         const productId = params.id;
-        const productData = dummyData.find((p) => p.id === parseInt(productId));
-        if (productData) {
-          setProduct(productData);
+
+        // Fetch product from Supabase
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq("id", productId)
+          .single(); // Fetch only one item
+
+        if (error) {
+          throw new Error(error.message);
         }
+
+        setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -38,10 +57,12 @@ const ProductDetails = () => {
     );
   }
 
-  if (!product) {
+  if (error || !product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-neutral-800">Product not found</p>
+        <p className="text-xl text-neutral-800">
+          {error || "Product not found"}
+        </p>
       </div>
     );
   }
@@ -51,9 +72,17 @@ const ProductDetails = () => {
       {/* Navigation */}
       <nav className="max-w-7xl mx-auto mb-8">
         <ol className="flex items-center space-x-2 text-sm text-neutral-600">
-          <li><a href="/" className="hover:text-[#cc0000]">Home</a></li>
+          <li>
+            <a href="/" className="hover:text-[#cc0000]">
+              Home
+            </a>
+          </li>
           <li>/</li>
-          <li><a href="/marketplace" className="hover:text-[#cc0000]">Marketplace</a></li>
+          <li>
+            <a href="/marketplace" className="hover:text-[#cc0000]">
+              Marketplace
+            </a>
+          </li>
           <li>/</li>
           <li className="text-neutral-400">{product.name}</li>
         </ol>
@@ -71,7 +100,8 @@ const ProductDetails = () => {
             />
             {product.originalPrice > product.price && (
               <div className="absolute top-6 left-6 bg-[#cc0000] text-white px-4 py-2 text-sm font-medium">
-                {Math.round((1 - (product.price/product.originalPrice))* 100)}% OFF
+                {Math.round((1 - product.price / product.originalPrice) * 100)}%
+                OFF
               </div>
             )}
           </div>
@@ -80,7 +110,9 @@ const ProductDetails = () => {
           <div className="flex flex-col gap-8">
             {/* Header */}
             <div>
-              <h1 className="text-4xl font-bold text-[#4b4b4b] mb-4">{product.name}</h1>
+              <h1 className="text-4xl font-bold text-[#4b4b4b] mb-4">
+                {product.name}
+              </h1>
               <div className="flex items-baseline gap-4">
                 <span className="text-3xl font-bold text-[#cc0000]">
                   ${product.price.toLocaleString()}
@@ -114,8 +146,8 @@ const ProductDetails = () => {
 
             {/* Tags */}
             <div className="flex flex-wrap gap-3">
-              {product.tags.map((tag, index) => (
-                <span 
+              {product.tags?.map((tag, index) => (
+                <span
                   key={index}
                   className="px-4 py-2 text-base bg-[#ff4d4d]/10 text-[#cc0000]"
                 >
@@ -126,7 +158,9 @@ const ProductDetails = () => {
 
             {/* Description */}
             <div>
-              <h2 className="text-2xl font-semibold text-neutral-800 mb-4">Description</h2>
+              <h2 className="text-2xl font-semibold text-neutral-800 mb-4">
+                Description
+              </h2>
               <p className="text-lg text-neutral-600 leading-relaxed">
                 {product.description || "No description available."}
               </p>
@@ -134,14 +168,14 @@ const ProductDetails = () => {
 
             {/* Action Buttons */}
             <div className="flex gap-6 mt-8">
-              <button 
+              <button
                 className="flex-1 bg-[#cc0000] text-white py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200"
                 onClick={() => alert("Added to waitlist!")}
               >
                 <Clock className="w-6 h-6" />
                 Join Waitlist
               </button>
-              <button 
+              <button
                 className="flex-1 border-2 border-[#cc0000] text-[#cc0000] hover:bg-[#cc0000] hover:text-white py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200"
                 onClick={() => alert("Message sent!")}
               >
@@ -149,9 +183,7 @@ const ProductDetails = () => {
                 Message Seller
               </button>
             </div>
-            
           </div>
-
         </div>
       </div>
     </main>

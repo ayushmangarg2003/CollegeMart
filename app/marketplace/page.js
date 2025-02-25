@@ -1,6 +1,7 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { supabase } from "@/libs/supabase/client";
+import { supabase } from "@/libs/supabase/client"; // Ensure correct import
 import ButtonAccount from "@/components/ButtonAccount";
 import config from "@/config";
 import Link from "next/link";
@@ -20,22 +21,35 @@ export default function Marketplace() {
   const [selectedTag, setSelectedTag] = useState("ALL");
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch products from Supabase
   useEffect(() => {
-    const fetchProducts = async () => {
+    const loadProducts = async () => {
       setIsLoading(true);
+
+      // **Step 1: Load from cache first**
+      const cachedProducts = localStorage.getItem("cachedProducts");
+      if (cachedProducts) {
+        const parsedProducts = JSON.parse(cachedProducts);
+        setProducts(parsedProducts);
+        setFilteredProducts(parsedProducts);
+        setIsLoading(false);
+      }
+
+      // **Step 2: Fetch fresh data from Supabase in the background**
       const { data, error } = await supabase.from("products").select("*");
+
       if (error) {
         console.error("Error fetching products:", error.message);
       } else {
-        console.log(data);
+        console.log("Fetched fresh data:", data);
         setProducts(data);
         setFilteredProducts(data);
+        localStorage.setItem("cachedProducts", JSON.stringify(data)); // **Update cache**
       }
+
       setIsLoading(false);
     };
 
-    fetchProducts();
+    loadProducts();
   }, []);
 
   const handleSearch = (query) => {
@@ -58,7 +72,9 @@ export default function Marketplace() {
     }
 
     if (tag && tag !== "ALL") {
-      filtered = filtered.filter((product) => product.tags.includes(tag));
+      filtered = filtered.filter(
+        (product) => product.tags.toLowerCase().includes(tag.toLowerCase()) // ✅ Fix: Substring check
+      );
     }
 
     setFilteredProducts(filtered);
@@ -67,8 +83,20 @@ export default function Marketplace() {
   return (
     <main className="min-h-screen pb-24 bg-base-100">
       <header className="bg-base-200 w-full flex justify-between px-8 py-4">
-        <Link className="flex items-center gap-2 shrink-0" href="/" title={`${config.appName} homepage`}>
-          <Image src={logo} alt={`${config.appName} logo`} className="w-8" placeholder="blur" priority={true} width={32} height={32} />
+        <Link
+          className="flex items-center gap-2 shrink-0"
+          href="/"
+          title={`${config.appName} homepage`}
+        >
+          <Image
+            src={logo}
+            alt={`${config.appName} logo`}
+            className="w-8"
+            placeholder="blur"
+            priority={true}
+            width={32}
+            height={32}
+          />
           <span className="font-extrabold text-lg">{config.appName}</span>
         </Link>
         <ButtonAccount />
@@ -81,7 +109,11 @@ export default function Marketplace() {
 
       {/* Tags Filter */}
       <div className="w-full flex justify-center">
-        <TagsFilter tags={["ALL", "Books", "Games", "Electronics", "Home"]} selectedTag={selectedTag} onFilter={handleFilter} />
+        <TagsFilter
+          tags={["ALL", "Books", "Games", "Electronics", "Home"]}
+          selectedTag={selectedTag}
+          onFilter={handleFilter}
+        />
       </div>
 
       {/* Products */}
@@ -91,7 +123,9 @@ export default function Marketplace() {
             <Loader className="w-8 h-8 text-[#cc0000] animate-spin" />
           </div>
         ) : filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => <ProductCard key={product.id} product={product} />)
+          filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
         ) : (
           <p className="text-center w-full mt-10">No products found.</p>
         )}
