@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/libs/supabase/client"; // Import Supabase client
+import { supabase } from "@/libs/supabase/client"; // Ensure correct import
 import { useParams } from "next/navigation";
 import {
   Calendar,
@@ -10,6 +10,8 @@ import {
   MapPin,
   Tag,
   Loader,
+  User,
+  Mail,
 } from "lucide-react";
 
 const ProductDetails = () => {
@@ -37,7 +39,13 @@ const ProductDetails = () => {
           throw new Error(error.message);
         }
 
-        setProduct(data);
+        // Convert tags from string to array
+        const processedProduct = {
+          ...data,
+          tags: data.tags ? data.tags.split(",").map((tag) => tag.trim()) : [],
+        };
+
+        setProduct(processedProduct);
       } catch (error) {
         console.error("Error fetching product:", error);
         setError(error.message);
@@ -137,6 +145,11 @@ const ProductDetails = () => {
                 <span className="font-medium min-w-[100px]">Location:</span>
                 <span>{product.location}</span>
               </div>
+              <div className="flex items-center gap-3 ">
+                <User size={20} className="text-neutral-400" />
+                <span className="font-medium min-w-[100px]">Owner:</span>
+                <span>{product.owner.split("@")[0]}</span>
+              </div>
               <div className="flex items-center gap-3">
                 <Calendar size={20} className="text-neutral-400" />
                 <span className="font-medium min-w-[100px]">Listed:</span>
@@ -172,15 +185,15 @@ const ProductDetails = () => {
                 className="flex-1 bg-[#cc0000] text-white py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200"
                 onClick={() => alert("Added to waitlist!")}
               >
-                <Clock className="w-6 h-6" />
-                Join Waitlist
+                <Mail className="w-6 h-6" />
+                Mail Owner
               </button>
               <button
                 className="flex-1 border-2 border-[#cc0000] text-[#cc0000] hover:bg-[#cc0000] hover:text-white py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200"
                 onClick={() => alert("Message sent!")}
               >
                 <MessageCircle className="w-6 h-6" />
-                Message Seller
+                WhatsApp
               </button>
             </div>
           </div>
