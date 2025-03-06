@@ -68,9 +68,7 @@ const ProductDetails = () => {
   if (error || !product) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-neutral-800">
-          {error || "Product not found"}
-        </p>
+        <p className="text-xl text-neutral-800">{error || "Product not found"}</p>
       </div>
     );
   }
@@ -81,15 +79,11 @@ const ProductDetails = () => {
       <nav className="max-w-7xl mx-auto mb-8">
         <ol className="flex items-center space-x-2 text-sm text-neutral-600">
           <li>
-            <a href="/" className="hover:text-[#cc0000]">
-              Home
-            </a>
+            <a href="/" className="hover:text-[#cc0000]">Home</a>
           </li>
           <li>/</li>
           <li>
-            <a href="/marketplace" className="hover:text-[#cc0000]">
-              Marketplace
-            </a>
+            <a href="/marketplace" className="hover:text-[#cc0000]">Marketplace</a>
           </li>
           <li>/</li>
           <li className="text-neutral-400">{product.name}</li>
@@ -101,15 +95,10 @@ const ProductDetails = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           {/* Image Section */}
           <div className="relative aspect-square bg-neutral-50">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="object-cover w-full h-full"
-            />
+            <img src={product.image} alt={product.name} className="object-cover w-full h-full" />
             {product.originalPrice > product.price && (
               <div className="absolute top-6 left-6 bg-[#cc0000] text-white px-4 py-2 text-sm font-medium">
-                {Math.round((1 - product.price / product.originalPrice) * 100)}%
-                OFF
+                {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
               </div>
             )}
           </div>
@@ -118,13 +107,9 @@ const ProductDetails = () => {
           <div className="flex flex-col gap-8">
             {/* Header */}
             <div>
-              <h1 className="text-4xl font-bold text-[#4b4b4b] mb-4">
-                {product.name}
-              </h1>
+              <h1 className="text-4xl font-bold text-[#4b4b4b] mb-4">{product.name}</h1>
               <div className="flex items-baseline gap-4">
-                <span className="text-3xl font-bold text-[#cc0000]">
-                  ${product.price.toLocaleString()}
-                </span>
+                <span className="text-3xl font-bold text-[#cc0000]">${product.price.toLocaleString()}</span>
                 {product.originalPrice > product.price && (
                   <span className="text-xl text-neutral-500 line-through">
                     ${product.originalPrice.toLocaleString()}
@@ -145,25 +130,22 @@ const ProductDetails = () => {
                 <span className="font-medium min-w-[100px]">Location:</span>
                 <span>{product.location}</span>
               </div>
-              <div className="flex items-center gap-3 ">
+              <div className="flex items-center gap-3">
                 <User size={20} className="text-neutral-400" />
                 <span className="font-medium min-w-[100px]">Owner:</span>
-                <span>{product.owner.split("@")[0]}</span>
+                <span>{product.owner ? product.owner.split("@")[0] : "Unknown"}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Calendar size={20} className="text-neutral-400" />
                 <span className="font-medium min-w-[100px]">Listed:</span>
-                <span>{new Date(product.listedDate).toLocaleDateString()}</span>
+                <span>{new Date(product.listed_date).toLocaleDateString()}</span>
               </div>
             </div>
 
             {/* Tags */}
             <div className="flex flex-wrap gap-3">
               {product.tags?.map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-4 py-2 text-base bg-[#ff4d4d]/10 text-[#cc0000]"
-                >
+                <span key={index} className="px-4 py-2 text-base bg-[#ff4d4d]/10 text-[#cc0000]">
                   {tag}
                 </span>
               ))}
@@ -171,9 +153,7 @@ const ProductDetails = () => {
 
             {/* Description */}
             <div>
-              <h2 className="text-2xl font-semibold text-neutral-800 mb-4">
-                Description
-              </h2>
+              <h2 className="text-2xl font-semibold text-neutral-800 mb-4">Description</h2>
               <p className="text-lg text-neutral-600 leading-relaxed">
                 {product.description || "No description available."}
               </p>
@@ -181,20 +161,27 @@ const ProductDetails = () => {
 
             {/* Action Buttons */}
             <div className="flex gap-6 mt-8">
-              <button
+              {/* Mail Owner Button */}
+              <a
+                href={`mailto:${product.owner}`}
                 className="flex-1 bg-[#cc0000] text-white py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200"
-                onClick={() => alert("Added to waitlist!")}
               >
                 <Mail className="w-6 h-6" />
                 Mail Owner
-              </button>
-              <button
-                className="flex-1 border-2 border-[#cc0000] text-[#cc0000] hover:bg-[#cc0000] hover:text-white py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200"
-                onClick={() => alert("Message sent!")}
-              >
-                <MessageCircle className="w-6 h-6" />
-                WhatsApp
-              </button>
+              </a>
+
+              {/* WhatsApp Button (Shown only if phone number exists) */}
+              {product.phone && (
+                <a
+                  href={`https://wa.me/+1${product.phone}`} // Change +1 if needed
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 border-2 border-[#cc0000] text-[#cc0000] hover:bg-[#cc0000] hover:text-white py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200"
+                >
+                  <MessageCircle className="w-6 h-6" />
+                  WhatsApp
+                </a>
+              )}
             </div>
           </div>
         </div>
