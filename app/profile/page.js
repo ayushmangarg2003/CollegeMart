@@ -10,73 +10,48 @@ import config from "@/config";
 import logo from "@/app/icon.png";
 import Image from "next/image";
 
-const dummyProducts = [
-  {
-    id: 2,
-    name: "Vintage Book Collection",
-    price: "150",
-    originalPrice: "200",
-    image:
-      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=400&fit=crop",
-    tags: ["Books", "Vintage", "Collectibles"],
-    description:
-      "A curated collection of classic literature in excellent condition.",
-    brand: "Various",
-    condition: "Very Good",
-    location: "Boston, MA",
-    listedDate: "2024-02-10",
-  },
-  {
-    id: 3,
-    name: "PlayStation 5 Digital Edition",
-    price: "399",
-    originalPrice: "499",
-    image:
-      "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=600&h=400&fit=crop",
-    tags: ["Electronics", "Games", "Console"],
-    description: "Like-new PS5 Digital Edition with two controllers.",
-    brand: "Sony",
-    condition: "Excellent",
-    location: "Austin, TX",
-    listedDate: "2024-02-17",
-  },
-];
-
-const dummyWatchlist = [
-  {
-    id: 2,
-    name: "Vintage Book Collection",
-    price: "150",
-    originalPrice: "200",
-    image:
-      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=400&fit=crop",
-    tags: ["Books", "Vintage", "Collectibles"],
-    description:
-      "A curated collection of classic literature in excellent condition.",
-    brand: "Various",
-    condition: "Very Good",
-    location: "Boston, MA",
-    listedDate: "2024-02-10",
-  },
-];
-
 const Profile = () => {
   const supabase = createClient();
   const [user, setUser] = useState(null);
-  const [userProducts, setUserProducts] = useState(dummyProducts);
-  const [watchlist, setWatchlist] = useState(dummyWatchlist);
+  const [userProducts, setUserProducts] = useState([]);
+  const [watchlist, setWatchlist] = useState([]); // Keeping this as it is
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-      setIsLoading(false);
+    const fetchUserAndProducts = async () => {
+      setIsLoading(true);
+      try {
+        // Get logged-in user
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+
+        if (userError) throw userError;
+        if (!user) throw new Error("You must be logged in to view this page.");
+
+        setUser(user);
+
+        // Fetch user's listed products
+        const { data: products, error: productsError } = await supabase
+          .from("products")
+          .select("*")
+          .eq("owner", user.email)
+          .order("listed_date", { ascending: false });
+
+        if (productsError) throw productsError;
+
+        setUserProducts(products);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    getUser();
+    fetchUserAndProducts();
   }, [supabase]);
 
   if (isLoading) {
@@ -87,13 +62,21 @@ const Profile = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-white">
       {/* Navigation */}
       <div className="bg-base-200 flex justify-center">
         <header className="bg-base-200 max-w-7xl bg-base-100 w-full flex justify-between py-4">
           <Link
-            className="flex items-center gap-2 shrink-0 "
+            className="flex items-center gap-2 shrink-0"
             href="/"
             title={`${config.appName} homepage`}
           >
@@ -169,7 +152,6 @@ const Profile = () => {
             </div>
           )}
         </section>
-        
       </div>
     </main>
   );
