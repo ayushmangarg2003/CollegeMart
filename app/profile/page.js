@@ -38,7 +38,7 @@ const Profile = () => {
           .from("products")
           .select("*")
           .eq("owner", user.email)
-          .order("listed_date", { ascending: false });
+          .order("listedDate", { ascending: false });
 
         if (productsError) throw productsError;
 
