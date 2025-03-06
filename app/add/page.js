@@ -16,6 +16,7 @@ const AddProductPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [phone, setPhone] = useState(""); 
   const [originalPrice, setOriginalPrice] = useState("");
   const [location, setLocation] = useState("");
   const [condition, setCondition] = useState("New");
@@ -56,6 +57,7 @@ const AddProductPage = () => {
       originalPrice: parseFloat(originalPrice),
       location,
       condition,
+      phone: phone || null,
       tags: selectedTags.join(","),
       image,
       listedDate: new Date().toISOString(),
@@ -131,6 +133,26 @@ const AddProductPage = () => {
               maxLength={500}
               required
             ></textarea>
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-lg font-medium text-gray-700">
+              Phone Number{" "}
+              <span className="text-sm text-gray-400">(+1)</span>
+            </label>
+            <input
+              type="tel"
+              className="w-full border border-gray-300 p-3 rounded-md focus:ring-2 focus:ring-[#cc0000] focus:border-[#cc0000] outline-none transition"
+              placeholder="Enter phone number"
+              value={phone}
+              onChange={(e) => {
+                const regex = /^[0-9\b]+$/;
+                if (e.target.value === "" || regex.test(e.target.value)) {
+                  setPhone(e.target.value);
+                }
+              }}
+              maxLength={15}
+            />
           </div>
 
           {/* Image Upload */}
