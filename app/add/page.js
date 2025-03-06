@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/libs/supabase/client"; // Ensure correct import
 
 const tagOptions = [
   "Books",
@@ -16,7 +17,7 @@ const AddProductPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [phone, setPhone] = useState(""); 
+  const [phone, setPhone] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [location, setLocation] = useState("");
   const [condition, setCondition] = useState("New");
@@ -24,6 +25,8 @@ const AddProductPage = () => {
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState("");
 
   const toggleTag = (tag) => {
     setSelectedTags((prevTags) =>
@@ -50,24 +53,57 @@ const AddProductPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const productData = {
-      name,
-      description,
-      price: parseFloat(price),
-      originalPrice: parseFloat(originalPrice),
-      location,
-      condition,
-      phone: phone || null,
-      tags: selectedTags.join(","),
-      image,
-      listedDate: new Date().toISOString(),
-    };
+    try {
+      // Save the product in Supabase
+      const { data, error } = await supabase.from("products").insert([
+        {
+          name,
+          description,
+          price: parseFloat(price),
+          originalPrice: originalPrice ? parseFloat(originalPrice) : null,
+          location,
+          condition,
+          phone: phone || null,
+          tags: selectedTags.join(","),
+          image,
+          listedDate: new Date().toISOString(),
+          owner: email,
+        },
+      ]);
 
-    console.log("Product Data:", productData);
+      if (error) throw error;
+
+      alert("Product added successfully!");
+
+      // Reset form after successful submission
+      setName("");
+      setDescription("");
+      setPrice("");
+      setOriginalPrice("");
+      setLocation("");
+      setCondition("New");
+      setPhone("");
+      setSelectedTags([]);
+      setImage("");
+      setImagePreview(null);
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    }
 
     setIsSubmitting(false);
-    alert("Product added successfully!");
   };
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUser(user);
+    };
+
+    getUser();
+  }, [supabase]);
 
   return (
     <div className="min-h-screen bg-white px-4 md:px-8 lg:px-16 py-12">
@@ -133,26 +169,6 @@ const AddProductPage = () => {
               maxLength={500}
               required
             ></textarea>
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-lg font-medium text-gray-700">
-              Phone Number{" "}
-              <span className="text-sm text-gray-400">(+1)</span>
-            </label>
-            <input
-              type="tel"
-              className="w-full border border-gray-300 p-3 rounded-md focus:ring-2 focus:ring-[#cc0000] focus:border-[#cc0000] outline-none transition"
-              placeholder="Enter phone number"
-              value={phone}
-              onChange={(e) => {
-                const regex = /^[0-9\b]+$/;
-                if (e.target.value === "" || regex.test(e.target.value)) {
-                  setPhone(e.target.value);
-                }
-              }}
-              maxLength={15}
-            />
           </div>
 
           {/* Image Upload */}
@@ -305,6 +321,41 @@ const AddProductPage = () => {
                 <option value="Good">Good</option>
                 <option value="Fair">Fair</option>
               </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="block text-lg font-medium text-gray-700">
+                Phone Number <span className="text-sm text-gray-400">(+1)</span>
+              </label>
+              <input
+                type="tel"
+                className="w-full border border-gray-300 p-3 rounded-md focus:ring-2 focus:ring-[#cc0000] focus:border-[#cc0000] outline-none transition"
+                placeholder="Enter phone number"
+                value={phone}
+                onChange={(e) => {
+                  const regex = /^[0-9\b]+$/;
+                  if (e.target.value === "" || regex.test(e.target.value)) {
+                    setPhone(e.target.value);
+                  }
+                }}
+                maxLength={15}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-lg font-medium text-gray-700">
+                Email Id
+              </label>
+              <input
+                type="text"
+                className="w-full border border-gray-300 p-3 rounded-md focus:ring-2 focus:ring-[#cc0000] focus:border-[#cc0000] outline-none transition"
+                placeholder="Enter email id"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
           </div>
 
