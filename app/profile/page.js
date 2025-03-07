@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/libs/supabase/client";
 import ButtonAccount from "@/components/ButtonAccount";
-import ProductCard from "@/components/ProductCard";
 import { Loader } from "lucide-react";
 import Link from "next/link";
 import config from "@/config";
 import logo from "@/app/icon.png";
 import Image from "next/image";
+import EditProductCard from "@/components/EditProductCard";
 
 const Profile = () => {
   const supabase = createClient();
@@ -121,7 +121,7 @@ const Profile = () => {
           {userProducts.length > 0 ? (
             <div className="flex flex-wrap mt-6">
               {userProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <EditProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
@@ -141,7 +141,7 @@ const Profile = () => {
           {watchlist.length > 0 ? (
             <div className="flex flex-wrap mt-6">
               {watchlist.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <EditProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
