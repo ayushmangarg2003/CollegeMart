@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 const tagOptions = [
   "Books",
   "Electronics",
-  "Gaming",
+  "Games",
   "Home",
   "Furniture",
   "Appliances",
@@ -158,8 +158,6 @@ const EditProductPage = () => {
             </p>
             <p className="text-sm text-gray-500">Please wait a moment...</p>
           </div>
-
-          
         </div>{" "}
       </div>
     );

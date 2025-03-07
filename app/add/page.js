@@ -6,7 +6,7 @@ import { supabase } from "@/libs/supabase/client"; // Ensure correct import
 const tagOptions = [
   "Books",
   "Electronics",
-  "Gaming",
+  "Games",
   "Home",
   "Furniture",
   "Appliances",
