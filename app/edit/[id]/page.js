@@ -190,7 +190,7 @@ const EditProductPage = () => {
         </h1>
         <div className="h-1 w-24 bg-[#cc0000] mt-4"></div>
 
-        {alert.show && (
+        {/* {alert.show && (
           <div
             className={`mt-6 p-4 rounded-md flex items-center gap-3 ${
               alert.type === "success"
@@ -215,7 +215,7 @@ const EditProductPage = () => {
               &times;
             </button>
           </div>
-        )}
+        )} */}
 
         <form onSubmit={handleUpdate} className="space-y-8 mt-6">
           {/* Name */}
