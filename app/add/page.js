@@ -14,6 +14,7 @@ const tagOptions = [
 ];
 
 const AddProductPage = () => {
+  // Form Fields
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -25,6 +26,8 @@ const AddProductPage = () => {
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Logged in User State 
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
 
@@ -36,6 +39,7 @@ const AddProductPage = () => {
     );
   };
 
+  //  Function to handle image while uploading
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
 
