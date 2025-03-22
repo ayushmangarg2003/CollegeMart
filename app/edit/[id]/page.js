@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { supabase } from "@/libs/supabase/client";
-import { Loader2, AlertCircle, CheckCircle, XCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 const tagOptions = [

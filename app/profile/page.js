@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/libs/supabase/client";
 import ButtonAccount from "@/components/ButtonAccount";
-import { Loader, Activity, ShoppingBag, Heart, Eye } from "lucide-react";
+import { Loader, Activity, ShoppingBag, Heart } from "lucide-react";
 import Link from "next/link";
 import config from "@/config";
 import logo from "@/app/icon.png";
