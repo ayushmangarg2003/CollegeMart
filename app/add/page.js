@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { supabase } from "@/libs/supabase/client"; // Ensure correct import
 
 const tagOptions = [
@@ -27,9 +28,10 @@ const AddProductPage = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Logged in User State 
+  // Logged in User State
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
+  const router = useRouter();
 
   const toggleTag = (tag) => {
     setSelectedTags((prevTags) =>
@@ -78,6 +80,7 @@ const AddProductPage = () => {
       if (error) throw error;
 
       alert("Product added successfully!");
+      router.push("/profile"); // Redirect to profile page
 
       // Reset form after successful submission
       setName("");

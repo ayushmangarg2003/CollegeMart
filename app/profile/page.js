@@ -12,8 +12,6 @@ import EditProductCard from "@/components/EditProductCard";
 import {
   LineChart,
   Line,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell,
@@ -22,6 +20,7 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  ResponsiveContainer,
 } from "recharts";
 
 const Profile = () => {
@@ -59,10 +58,9 @@ const Profile = () => {
         if (productsError) throw productsError;
 
         setUserProducts(products);
-        
+
         // Generate chart data based on products
         generateChartData(products);
-        
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err.message);
@@ -73,21 +71,21 @@ const Profile = () => {
 
     fetchUserAndProducts();
   }, [supabase]);
-  
+
   // Function to generate chart data from products
   const generateChartData = (products) => {
     if (!products || products.length === 0) return;
-    
+
     // Generate data for product price pie chart
-    const priceData = products.map(product => ({
-      name: product.name?.substring(0, 15) || 'Unnamed',
+    const priceData = products.map((product) => ({
+      name: product.name?.substring(0, 15) || "Unnamed",
       value: product.price || 0,
     }));
     setProductPriceData(priceData);
-    
+
     // Generate mock activity data - in a real app, you'd fetch this from your analytics
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    const activityData = months.map(month => {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+    const activityData = months.map((month) => {
       // In a real app, this would be actual historical data from your database
       return {
         name: month,
@@ -100,9 +98,15 @@ const Profile = () => {
 
   // Calculate metrics
   const calculateMetrics = () => {
-    const totalViews = userProducts.reduce((sum, product) => sum + (product.views || 0), 0);
-    const totalInquiries = userProducts.reduce((sum, product) => sum + (product.inquiries || 0), 0);
-    
+    const totalViews = userProducts.reduce(
+      (sum, product) => sum + (product.views || 0),
+      0
+    );
+    const totalInquiries = userProducts.reduce(
+      (sum, product) => sum + (product.inquiries || 0),
+      0
+    );
+
     return {
       totalViews: totalViews || 0,
       totalInquiries: totalInquiries || 0,
@@ -110,7 +114,7 @@ const Profile = () => {
       watchlistItems: watchlist.length,
     };
   };
-  
+
   const metrics = calculateMetrics();
 
   if (isLoading) {
@@ -163,7 +167,7 @@ const Profile = () => {
           </h1>
           <p className="text-xl text-neutral-600">{user?.email}</p>
         </section>
-        
+
         {/* Dashboard Analytics Cards */}
         <section className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-lg shadow border">
@@ -174,10 +178,7 @@ const Profile = () => {
             <p className="text-3xl font-bold">{metrics.totalProducts}</p>
             <p className="text-xs text-neutral-500">Active Listings</p>
           </div>
-          
-        
-    
-          
+
           <div className="bg-white p-4 rounded-lg shadow border">
             <div className="flex items-center mb-2">
               <Heart className="text-red-500 mr-2" size={20} />
@@ -187,7 +188,7 @@ const Profile = () => {
             <p className="text-xs text-neutral-500">Saved Items</p>
           </div>
         </section>
-        
+
         {/* Dashboard Charts */}
         {userProducts.length > 0 && (
           <>
@@ -199,32 +200,32 @@ const Profile = () => {
                   Marketplace Activity
                 </h2>
                 <div className="h-64 w-full">
-                  <LineChart
-                    width={800}
-                    height={250}
-                    data={productActivityData}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="views" 
-                      stroke="#8884d8" 
-                      strokeWidth={2} 
-                      name="Views"
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="inquiries" 
-                      stroke="#82ca9d" 
-                      strokeWidth={2}
-                      name="Inquiries" 
-                    />
-                  </LineChart>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      data={productActivityData}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="views"
+                        stroke="#8884d8"
+                        strokeWidth={2}
+                        name="Views"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="inquiries"
+                        stroke="#82ca9d"
+                        strokeWidth={2}
+                        name="Inquiries"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
               </div>
             </section>
@@ -236,7 +237,7 @@ const Profile = () => {
                   Product Price Distribution
                 </h2>
                 <div className="h-64 flex justify-center items-center">
-                  <PieChart width={300} height={250}>
+                  <PieChart width={600} height={250}>
                     <Pie
                       data={productPriceData}
                       cx="50%"
@@ -244,14 +245,24 @@ const Profile = () => {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
-                      label={({ name, value }) => 
-                        `${name}${name.length > 10 ? '...' : ''}: $${value.toFixed(2)}`
+                      label={({ name, value }) =>
+                        `${name}${
+                          name.length > 10 ? "..." : ""
+                        }: $${value.toFixed(2)}`
                       }
                     >
                       {productPriceData.map((entry, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#0088FE'][index % 5]} 
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={
+                            [
+                              "#8884d8",
+                              "#82ca9d",
+                              "#ffc658",
+                              "#ff8042",
+                              "#0088FE",
+                            ][index % 5]
+                          }
                         />
                       ))}
                     </Pie>
