@@ -89,8 +89,8 @@ const Profile = () => {
       // In a real app, this would be actual historical data from your database
       return {
         name: month,
-        views: Math.floor(Math.random() * 50),
-        inquiries: 0,
+        Sales: Math.floor(Math.random() * 50) + 2000,
+        NoOfItems: Math.floor(Math.random() * 50) + 100,
       };
     });
     setProductActivityData(activityData);
@@ -98,18 +98,18 @@ const Profile = () => {
 
   // Calculate metrics
   const calculateMetrics = () => {
-    const totalViews = userProducts.reduce(
-      (sum, product) => sum + (product.views || 0),
+    const totalsales = userProducts.reduce(
+      (sum, product) => sum + (product.sales || 0),
       0
     );
-    const totalInquiries = userProducts.reduce(
-      (sum, product) => sum + (product.inquiries || 0),
+    const NotalnoOfItems = userProducts.reduce(
+      (sum, product) => sum + (product.NoOfItems || 0),
       0
     );
 
     return {
-      totalViews: totalViews || 0,
-      totalInquiries: totalInquiries || 0,
+      totalsales: totalsales || 0,
+      NotalnoOfItems: NotalnoOfItems || 0,
       totalProducts: userProducts.length,
       watchlistItems: watchlist.length,
     };
@@ -212,17 +212,10 @@ const Profile = () => {
                       <Legend />
                       <Line
                         type="monotone"
-                        dataKey="views"
-                        stroke="#8884d8"
-                        strokeWidth={2}
-                        name="Views"
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="inquiries"
+                        dataKey="NoOfItems"
                         stroke="#82ca9d"
                         strokeWidth={2}
-                        name="Inquiries"
+                        name="No Of Items Sold"
                       />
                     </LineChart>
                   </ResponsiveContainer>
