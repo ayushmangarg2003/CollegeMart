@@ -12,6 +12,7 @@ const tagOptions = [
   "Furniture",
   "Appliances",
   "Fashion",
+  "Stickers",
 ];
 
 const AddProductPage = () => {
