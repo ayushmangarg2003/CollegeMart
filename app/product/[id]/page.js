@@ -11,13 +11,26 @@ import {
   Loader,
   User,
   Mail,
+  Check,
 } from "lucide-react";
 
 const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const params = useParams();
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setCurrentUser(user);
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   useEffect(() => {
     if (!params.id) return;
@@ -83,6 +96,9 @@ const ProductDetails = () => {
     window.open(mailtoLink, "_blank");
   };
 
+  // Check if current user is the product owner
+  const isCurrentUserOwner = currentUser && product.owner === currentUser.email;
+
   return (
     <main className="min-h-screen bg-white px-4 md:px-8 lg:px-16 py-6">
       <nav className="max-w-7xl mx-auto mb-8">
@@ -95,7 +111,15 @@ const ProductDetails = () => {
         </ol>
       </nav>
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative">
+        {/* Owner Check Mark */}
+        {isCurrentUserOwner && (
+          <div className="absolute top-0 right-0 z-10 bg-[#cc0000] text-white px-4 py-2 rounded-bl-lg flex items-center gap-2">
+            <Check size={20} />
+            Your Listing
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           <div className="relative aspect-square bg-neutral-50">
             <img src={product.image} alt={product.name} className="object-cover w-full h-full" />
