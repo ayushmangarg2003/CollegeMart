@@ -33,7 +33,7 @@ const PrivacyPolicy = () => {
 
         <div className="leading-relaxed space-y-6 text-sm" style={{ fontFamily: "sans-serif" }}>
           <p>
-            This Privacy Policy describes how <strong>{config.appName}</strong> ("we," "us," or "our")
+            This Privacy Policy describes how <strong>{config.appName}</strong> (<span>&quot;we,&quot;</span> <span>&quot;us,&quot;</span> or <span>&quot;our&quot;</span>)
             collects, uses, and protects the information you provide when using our platform.
           </p>
 
