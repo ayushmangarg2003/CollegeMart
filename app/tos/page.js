@@ -33,12 +33,16 @@ const TOS = () => {
 
         <div className="leading-relaxed space-y-6 text-sm" style={{ fontFamily: "sans-serif" }}>
           <p>
-            These Terms and Conditions ("Terms") govern your use of <strong>{config.appName}</strong> ("we," "us," or "our") and the services we provide. By accessing or using our platform, you agree to comply with these Terms.
+            These Terms and Conditions (<span>&quot;Terms&quot;</span>) govern your use of{" "}
+            <strong>{config.appName}</strong> (<span>&quot;we,&quot;</span>{" "}
+            <span>&quot;us,&quot;</span> or <span>&quot;our&quot;</span>) and the services we provide. By
+            accessing or using our platform, you agree to comply with these Terms.
           </p>
 
           <h2 className="text-xl font-bold pt-4">1. Acceptance of Terms</h2>
           <p>
-            By accessing or using <strong>{config.appName}</strong>, you agree to be bound by these Terms. If you do not agree with any part of the Terms, you may not access or use the platform.
+            By accessing or using <strong>{config.appName}</strong>, you agree to be bound by these Terms.
+            If you do not agree with any part of the Terms, you may not access or use the platform.
           </p>
 
           <h2 className="text-xl font-bold pt-4">2. Use of Our Services</h2>
@@ -51,7 +55,9 @@ const TOS = () => {
 
           <h2 className="text-xl font-bold pt-4">3. User Accounts</h2>
           <p>
-            To access certain features, you may need to create an account. You are responsible for maintaining the confidentiality of your account information and ensuring that your account is used only by you.
+            To access certain features, you may need to create an account. You are responsible for
+            maintaining the confidentiality of your account information and ensuring that your account is
+            used only by you.
           </p>
 
           <h2 className="text-xl font-bold pt-4">4. Prohibited Activities</h2>
@@ -64,27 +70,34 @@ const TOS = () => {
 
           <h2 className="text-xl font-bold pt-4">5. Intellectual Property</h2>
           <p>
-            All content, trademarks, and intellectual property on <strong>{config.appName}</strong> are the property of their respective owners. You agree not to copy, reproduce, or distribute any content without prior consent.
+            All content, trademarks, and intellectual property on <strong>{config.appName}</strong> are
+            the property of their respective owners. You agree not to copy, reproduce, or distribute any
+            content without prior consent.
           </p>
 
           <h2 className="text-xl font-bold pt-4">6. Termination of Use</h2>
           <p>
-            We reserve the right to terminate or suspend your account and access to the platform if you violate these Terms or engage in any unauthorized activities.
+            We reserve the right to terminate or suspend your account and access to the platform if you
+            violate these Terms or engage in any unauthorized activities.
           </p>
 
           <h2 className="text-xl font-bold pt-4">7. Limitation of Liability</h2>
           <p>
-            We are not liable for any indirect, incidental, or consequential damages resulting from the use of <strong>{config.appName}</strong>. Your use of the platform is at your own risk.
+            We are not liable for any indirect, incidental, or consequential damages resulting from the
+            use of <strong>{config.appName}</strong>. Your use of the platform is at your own risk.
           </p>
 
           <h2 className="text-xl font-bold pt-4">8. Changes to Terms</h2>
           <p>
-            We reserve the right to modify these Terms at any time. Changes will be communicated through the platform. Your continued use of <strong>{config.appName}</strong> after changes constitute acceptance of the modified Terms.
+            We reserve the right to modify these Terms at any time. Changes will be communicated through
+            the platform. Your continued use of <strong>{config.appName}</strong> after changes constitute
+            acceptance of the modified Terms.
           </p>
 
           <h2 className="text-xl font-bold pt-4">9. Governing Law</h2>
           <p>
-            These Terms are governed by and interpreted in accordance with the laws of India. Any disputes arising from these Terms will be subject to the jurisdiction of the courts of India.
+            These Terms are governed by and interpreted in accordance with the laws of India. Any disputes
+            arising from these Terms will be subject to the jurisdiction of the courts of India.
           </p>
 
           <h2 className="text-xl font-bold pt-4">10. Contact Us</h2>
