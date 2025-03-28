@@ -26,50 +26,81 @@ const PrivacyPolicy = () => {
           </svg>{" "}
           Back
         </Link>
+
         <h1 className="text-3xl font-extrabold pb-6">
           Privacy Policy for {config.appName}
         </h1>
 
-        <pre
-          className="leading-relaxed whitespace-pre-wrap"
-          style={{ fontFamily: "sans-serif" }}
-        >{`
-          This Privacy Policy describes how ${config.appName} ("we," "us," or "our") collects, uses, and protects the information you provide when using our platform.
+        <div className="leading-relaxed space-y-6 text-sm" style={{ fontFamily: "sans-serif" }}>
+          <p>
+            This Privacy Policy describes how <strong>{config.appName}</strong> ("we," "us," or "our")
+            collects, uses, and protects the information you provide when using our platform.
+          </p>
 
-          1. Information We Collect
-          We may collect personal information such as your name, email address, phone number, and any other details you provide while using our platform. Additionally, we may collect non-personal information such as browser type, IP address, and usage patterns.
+          <h2 className="text-xl font-bold pt-4">1. Information We Collect</h2>
+          <p>
+            We may collect personal information such as your name, email address, phone number, and any
+            other details you provide while using our platform. Additionally, we may collect non-personal
+            information such as browser type, IP address, and usage patterns.
+          </p>
 
-          2. How We Use Your Information
-          We use your information to:
-          - Provide and manage our services
-          - Process and fulfill your orders
-          - Improve our platform and user experience
-          - Send updates, notifications, and promotional offers
-          - Ensure security and prevent fraudulent activities
+          <h2 className="text-xl font-bold pt-4">2. How We Use Your Information</h2>
+          <p>We use your information to:</p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>Provide and manage our services</li>
+            <li>Process and fulfill your orders</li>
+            <li>Improve our platform and user experience</li>
+            <li>Send updates, notifications, and promotional offers</li>
+            <li>Ensure security and prevent fraudulent activities</li>
+          </ul>
 
-          3. Data Security
-          We implement appropriate security measures to protect your personal information from unauthorized access, alteration, or disclosure. However, no method of transmission over the Internet is 100% secure.
+          <h2 className="text-xl font-bold pt-4">3. Data Security</h2>
+          <p>
+            We implement appropriate security measures to protect your personal information from
+            unauthorized access, alteration, or disclosure. However, no method of transmission over the
+            Internet is 100% secure.
+          </p>
 
-          4. Third-Party Services
-          We may use third-party services to analyze usage data, process payments, and improve functionality. These services have their own privacy policies, and we encourage you to review them.
+          <h2 className="text-xl font-bold pt-4">4. Third-Party Services</h2>
+          <p>
+            We may use third-party services to analyze usage data, process payments, and improve
+            functionality. These services have their own privacy policies, and we encourage you to review
+            them.
+          </p>
 
-          5. Cookies
-          We use cookies to enhance your browsing experience. You can choose to disable cookies through your browser settings, but this may limit certain functionalities of the platform.
+          <h2 className="text-xl font-bold pt-4">5. Cookies</h2>
+          <p>
+            We use cookies to enhance your browsing experience. You can choose to disable cookies through
+            your browser settings, but this may limit certain functionalities of the platform.
+          </p>
 
-          6. Your Rights
-          You have the right to:
-          - Access and update your personal information
-          - Request deletion of your account and data
-          - Opt-out of marketing communications
+          <h2 className="text-xl font-bold pt-4">6. Your Rights</h2>
+          <p>You have the right to:</p>
+          <ul className="list-disc list-inside space-y-2">
+            <li>Access and update your personal information</li>
+            <li>Request deletion of your account and data</li>
+            <li>Opt-out of marketing communications</li>
+          </ul>
 
-          7. Changes to This Policy
-          We reserve the right to modify this Privacy Policy at any time. Changes will be communicated through the platform.
+          <h2 className="text-xl font-bold pt-4">7. Changes to This Policy</h2>
+          <p>
+            We reserve the right to modify this Privacy Policy at any time. Changes will be communicated
+            through the platform.
+          </p>
 
-          8. Contact Us
-          If you have any questions or concerns about this Privacy Policy, please contact us at support@clarkmart.com.
+          <h2 className="text-xl font-bold pt-4">8. Contact Us</h2>
+          <p>
+            If you have any questions or concerns about this Privacy Policy, please contact us at{" "}
+            <a href="mailto:support@clarkmart.com" className="text-blue-500 underline">
+              support@clarkmart.com
+            </a>
+            .
+          </p>
 
-          By using ${config.appName}, you agree to this Privacy Policy.
-        `}</pre>
+          <p className="pt-4">
+            By using <strong>{config.appName}</strong>, you agree to this Privacy Policy.
+          </p>
+        </div>
       </div>
     </main>
   );
