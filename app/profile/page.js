@@ -52,7 +52,7 @@ const Profile = () => {
         const { data: products, error: productsError } = await supabase
           .from("products")
           .select("*")
-          .eq("owner", user.email)
+          .ilike("owner", user.email)
           .order("listedDate", { ascending: false });
 
         if (productsError) throw productsError;
