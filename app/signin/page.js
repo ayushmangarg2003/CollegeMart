@@ -17,10 +17,10 @@ export default function Login() {
   const handleSignup = async (e, options) => {
     e?.preventDefault();
 
-    // if (!email.includes("@clarku.edu")) {
-    //   setError("Only Clark University emails are allowed.");
-    //   return;
-    // }
+    if (!email.includes("@clarku.edu")) {
+      setError("Only Clark University emails are allowed.");
+      return;
+    }
 
     setError("");
     setIsLoading(true);
