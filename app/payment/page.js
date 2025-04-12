@@ -186,7 +186,7 @@ const PaymentPage = () => {
             </div>
             <h2 className="text-2xl font-bold text-green-600 mb-4">Payment Successful!</h2>
             <p className="text-neutral-600 mb-8">
-              Your payment of ${formData.amount} has been processed successfully. 
+              Your payment has been processed successfully. 
               You will receive a confirmation email shortly.
             </p>
             <Link 
