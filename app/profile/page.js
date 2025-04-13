@@ -9,6 +9,8 @@ import config from "@/config";
 import logo from "@/app/icon.png";
 import Image from "next/image";
 import EditProductCard from "@/components/EditProductCard";
+import ProductCard from "@/components/ProductCard";
+
 import {
   LineChart,
   Line,
@@ -27,17 +29,16 @@ const Profile = () => {
   const supabase = createClient();
   const [user, setUser] = useState(null);
   const [userProducts, setUserProducts] = useState([]);
-  const [watchlist, setWatchlist] = useState([]); // Keeping this as it is
+  const [watchlist, setWatchlist] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [productPriceData, setProductPriceData] = useState([]);
   const [productActivityData, setProductActivityData] = useState([]);
 
   useEffect(() => {
-    const fetchUserAndProducts = async () => {
+    const fetchData = async () => {
       setIsLoading(true);
       try {
-        // Get logged-in user
         const {
           data: { user },
           error: userError,
@@ -48,7 +49,6 @@ const Profile = () => {
 
         setUser(user);
 
-        // Fetch user's listed products
         const { data: products, error: productsError } = await supabase
           .from("products")
           .select("*")
@@ -58,9 +58,14 @@ const Profile = () => {
         if (productsError) throw productsError;
 
         setUserProducts(products);
-
-        // Generate chart data based on products
         generateChartData(products);
+
+        // Load wishlist from localStorage
+        const localWishlist = localStorage.getItem("wishlist");
+        if (localWishlist) {
+          const parsed = JSON.parse(localWishlist);
+          setWatchlist(parsed);
+        }
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err.message);
@@ -69,34 +74,27 @@ const Profile = () => {
       }
     };
 
-    fetchUserAndProducts();
-  }, [supabase]);
+    fetchData();
+  }, []);
 
-  // Function to generate chart data from products
   const generateChartData = (products) => {
     if (!products || products.length === 0) return;
 
-    // Generate data for product price pie chart
     const priceData = products.map((product) => ({
       name: product.name?.substring(0, 15) || "Unnamed",
       value: product.price || 0,
     }));
     setProductPriceData(priceData);
 
-    // Generate mock activity data - in a real app, you'd fetch this from your analytics
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-    const activityData = months.map((month) => {
-      // In a real app, this would be actual historical data from your database
-      return {
-        name: month,
-        Sales: Math.floor(Math.random() * 50) + 2000,
-        NoOfItems: Math.floor(Math.random() * 50) + 100,
-      };
-    });
+    const activityData = months.map((month) => ({
+      name: month,
+      Sales: Math.floor(Math.random() * 50) + 2000,
+      NoOfItems: Math.floor(Math.random() * 50) + 100,
+    }));
     setProductActivityData(activityData);
   };
 
-  // Calculate metrics
   const calculateMetrics = () => {
     const totalsales = userProducts.reduce(
       (sum, product) => sum + (product.sales || 0),
@@ -138,11 +136,7 @@ const Profile = () => {
       {/* Navigation */}
       <div className="bg-base-200 flex justify-center">
         <header className="bg-base-200 max-w-7xl bg-base-100 w-full flex justify-between py-4">
-          <Link
-            className="flex items-center gap-2 shrink-0"
-            href="/"
-            title={`${config.appName} homepage`}
-          >
+          <Link className="flex items-center gap-2 shrink-0" href="/">
             <Image
               src={logo}
               alt={`${config.appName} logo`}
@@ -154,13 +148,11 @@ const Profile = () => {
             />
             <span className="font-extrabold text-lg">{config.appName}</span>
           </Link>
-
           <ButtonAccount />
         </header>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-12">
-        {/* User Profile Info */}
         <section className="mb-8">
           <h1 className="text-4xl font-bold text-[#4b4b4b] mb-3">
             {user?.user_metadata?.name || "Welcome back!"}
@@ -168,7 +160,6 @@ const Profile = () => {
           <p className="text-xl text-neutral-600">{user?.email}</p>
         </section>
 
-        {/* Dashboard Analytics Cards */}
         <section className="mb-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white p-4 rounded-lg shadow border">
             <div className="flex items-center mb-2">
@@ -189,7 +180,6 @@ const Profile = () => {
           </div>
         </section>
 
-        {/* Dashboard Charts */}
         {userProducts.length > 0 && (
           <>
             {/* Activity Chart */}
@@ -239,9 +229,7 @@ const Profile = () => {
                       fill="#8884d8"
                       dataKey="value"
                       label={({ name, value }) =>
-                        `${name}${
-                          name.length > 10 ? "..." : ""
-                        }: $${value.toFixed(2)}`
+                        `${name}${name.length > 10 ? "..." : ""}: $${value}`
                       }
                     >
                       {productPriceData.map((entry, index) => (
@@ -259,7 +247,7 @@ const Profile = () => {
                         />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+                    <Tooltip formatter={(value) => `$${value}`} />
                   </PieChart>
                 </div>
               </div>
@@ -281,41 +269,27 @@ const Profile = () => {
             </Link>
           </div>
 
-          {userProducts.length > 0 ? (
-            <div className="flex flex-wrap mt-6">
-              {userProducts.map((product) => (
-                <EditProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16 bg-neutral-50">
-              <p className="text-lg text-neutral-600">
-                You have not listed any products yet.
-              </p>
-            </div>
-          )}
+          <div className="flex flex-wrap mt-6">
+            {userProducts.map((product) => (
+              <EditProductCard key={product.id} product={product} />
+            ))}
+          </div>
         </section>
 
-        {/* Watchlist Section */}
-        <section>
-          <h2 className="text-2xl font-semibold text-[#4b4b4b] mb-8 flex items-center">
-            <Heart className="text-[#cc0000] mr-2" size={20} />
-            Your Watchlist
-          </h2>
-          {watchlist.length > 0 ? (
+        {/* Wishlist Products Section */}
+        {watchlist.length > 0 && (
+          <section className="mb-16">
+            <h2 className="text-2xl font-semibold text-[#4b4b4b] flex items-center mb-6">
+              <Heart className="text-[#cc0000] mr-2" size={20} />
+              Your Wishlist
+            </h2>
             <div className="flex flex-wrap mt-6">
               {watchlist.map((product) => (
-                <EditProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
-          ) : (
-            <div className="text-center py-16 bg-neutral-50">
-              <p className="text-lg text-neutral-600">
-                No items in your watchlist yet.
-              </p>
-            </div>
-          )}
-        </section>
+          </section>
+        )}
       </div>
     </main>
   );
