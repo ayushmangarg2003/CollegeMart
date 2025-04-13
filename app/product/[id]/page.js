@@ -15,7 +15,6 @@ import {
   Check,
   ShoppingCart,
   Heart,
-  HeartOff,
 } from "lucide-react";
 
 const ProductDetails = () => {
@@ -23,12 +22,10 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [isWishlisted, setIsWishlisted] = useState(false);
-
+  const [isInWishlist, setIsInWishlist] = useState(false);
   const params = useParams();
   const router = useRouter();
 
-  // Fetch current user
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const {
@@ -40,7 +37,6 @@ const ProductDetails = () => {
     fetchCurrentUser();
   }, []);
 
-  // Fetch product data
   useEffect(() => {
     if (!params.id) return;
 
@@ -55,7 +51,9 @@ const ProductDetails = () => {
           .eq("id", productId)
           .single();
 
-        if (error) throw new Error(error.message);
+        if (error) {
+          throw new Error(error.message);
+        }
 
         const processedProduct = {
           ...data,
@@ -63,6 +61,9 @@ const ProductDetails = () => {
         };
 
         setProduct(processedProduct);
+        
+        // Check if product is in wishlist
+        checkWishlistStatus(processedProduct.id);
       } catch (error) {
         console.error("Error fetching product:", error);
         setError(error.message);
@@ -74,39 +75,82 @@ const ProductDetails = () => {
     fetchProduct();
   }, [params.id]);
 
-  // Wishlist status on load
-  useEffect(() => {
-    if (product) {
-      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      setIsWishlisted(wishlist.includes(product.id));
+  // Function to check if current product is in wishlist
+  const checkWishlistStatus = (productId) => {
+    if (typeof window !== 'undefined') {
+      try {
+        const wishlistData = localStorage.getItem('wishlist');
+        
+        // Make sure we have valid data
+        if (!wishlistData) {
+          setIsInWishlist(false);
+          return;
+        }
+        
+        // Try to parse the data safely
+        const wishlist = JSON.parse(wishlistData);
+        
+        // Ensure wishlist is an array before using .some()
+        if (Array.isArray(wishlist)) {
+          setIsInWishlist(wishlist.some(item => item && item.id === productId));
+        } else {
+          // If wishlist isn't an array, reset it and set status to false
+          localStorage.setItem('wishlist', JSON.stringify([]));
+          setIsInWishlist(false);
+        }
+      } catch (err) {
+        console.error("Error reading wishlist from localStorage:", err);
+        // Reset wishlist if data is corrupted
+        localStorage.setItem('wishlist', JSON.stringify([]));
+        setIsInWishlist(false);
+      }
     }
-  }, [product]);
-
-  const handleMailClick = () => {
-    if (!product.owner) {
-      alert("Owner's email is not available.");
-      return;
-    }
-
-    const mailtoLink = `https://mail.google.com/mail/u/0/?fs=1&to=${product.owner}&tf=cm`;
-    window.open(mailtoLink, "_blank");
   };
 
-  const handleWishlistToggle = () => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    if (isWishlisted) {
-      const updated = wishlist.filter((id) => id !== product.id);
-      localStorage.setItem("wishlist", JSON.stringify(updated));
-      setIsWishlisted(false);
-    } else {
-      wishlist.push(product.id);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      setIsWishlisted(true);
+  // Function to toggle wishlist status
+  const toggleWishlist = () => {
+    if (!product) return;
+    
+    try {
+      // Get current wishlist from localStorage with error handling
+      let wishlist = [];
+      try {
+        const wishlistData = localStorage.getItem('wishlist');
+        wishlist = wishlistData ? JSON.parse(wishlistData) : [];
+        
+        // Ensure wishlist is an array
+        if (!Array.isArray(wishlist)) {
+          wishlist = [];
+        }
+      } catch (err) {
+        console.error("Error parsing wishlist:", err);
+        wishlist = [];
+      }
+      
+      if (isInWishlist) {
+        // Remove from wishlist
+        const updatedWishlist = wishlist.filter(item => item && item.id !== product.id);
+        localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+        setIsInWishlist(false);
+      } else {
+        // Add to wishlist
+        const productToSave = {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          originalPrice: product.originalPrice,
+          image: product.image,
+          condition: product.condition,
+        };
+        
+        const updatedWishlist = [...wishlist, productToSave];
+        localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+        setIsInWishlist(true);
+      }
+    } catch (err) {
+      console.error("Error updating wishlist:", err);
     }
   };
-
-  const isCurrentUserOwner =
-    currentUser && product?.owner === currentUser.email;
 
   if (loading) {
     return (
@@ -125,6 +169,22 @@ const ProductDetails = () => {
       </div>
     );
   }
+
+  // Function to open mail client
+  const handleMailClick = () => {
+    if (!product.owner) {
+      alert("Owner's email is not available.");
+      return;
+    }
+
+    const mailtoLink = `https://mail.google.com/mail/u/0/?fs=1&to=${product.owner}&tf=cm`;
+
+    // Force the browser to open the email client
+    window.open(mailtoLink, "_blank");
+  };
+
+  // Check if current user is the product owner
+  const isCurrentUserOwner = currentUser && product.owner === currentUser.email;
 
   return (
     <main className="min-h-screen bg-white px-4 md:px-8 lg:px-16 py-6 relative">
@@ -147,6 +207,7 @@ const ProductDetails = () => {
       </nav>
 
       <div className="max-w-7xl mx-auto relative">
+        {/* Owner Check Mark */}
         {isCurrentUserOwner && (
           <div className="absolute top-0 right-0 z-10 bg-[#cc0000] text-white px-4 py-2 rounded-bl-lg flex items-center gap-2">
             <Check size={20} />
@@ -170,20 +231,33 @@ const ProductDetails = () => {
           </div>
 
           <div className="flex flex-col gap-8">
-            <div>
-              <h1 className="text-4xl font-bold text-[#4b4b4b] mb-4">
-                {product.name}
-              </h1>
-              <div className="flex items-baseline gap-4">
-                <span className="text-3xl font-bold text-[#cc0000]">
-                  ${product.price.toLocaleString()}
-                </span>
-                {product.originalPrice > product.price && (
-                  <span className="text-xl text-neutral-500 line-through">
-                    ${product.originalPrice.toLocaleString()}
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-4xl font-bold text-[#4b4b4b] mb-4">
+                  {product.name}
+                </h1>
+                <div className="flex items-baseline gap-4">
+                  <span className="text-3xl font-bold text-[#cc0000]">
+                    ${product.price.toLocaleString()}
                   </span>
-                )}
+                  {product.originalPrice > product.price && (
+                    <span className="text-xl text-neutral-500 line-through">
+                      ${product.originalPrice.toLocaleString()}
+                    </span>
+                  )}
+                </div>
               </div>
+              
+              {/* Wishlist Heart Button */}
+              <button 
+                onClick={toggleWishlist}
+                className="p-3 rounded-full hover:bg-neutral-100 transition-colors"
+                aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+              >
+                <Heart 
+                  className={`w-8 h-8 ${isInWishlist ? "fill-[#cc0000] text-[#cc0000]" : "text-neutral-400"}`} 
+                />
+              </button>
             </div>
 
             <div className="space-y-4 text-base text-neutral-600">
@@ -234,7 +308,9 @@ const ProductDetails = () => {
             </div>
 
             <div className="flex flex-col gap-4">
+              {/* Contact Buttons Row */}
               <div className="flex gap-6">
+                {/* Mail Owner Button */}
                 <button
                   onClick={handleMailClick}
                   className="flex-1 bg-[#cc0000] text-white py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200"
@@ -243,6 +319,7 @@ const ProductDetails = () => {
                   Send Mail
                 </button>
 
+                {/* WhatsApp Button (Shown only if phone number exists) */}
                 {product.phone && (
                   <a
                     href={`https://wa.me/+1${product.phone}`}
@@ -255,40 +332,17 @@ const ProductDetails = () => {
                   </a>
                 )}
               </div>
-
-              <div className="flex gap-6">
-                {/* Wishlist Button */}
-                <button
-                  onClick={handleWishlistToggle}
-                  className={`flex-1 py-4 px-8 flex items-center justify-center gap-3 transition-colors duration-200 ${
-                    isWishlisted
-                      ? "bg-[#cc0000] text-white hover:bg-[#aa0000]"
-                      : "border-2 border-[#cc0000] text-[#cc0000] hover:bg-[#cc0000] hover:text-white"
-                  }`}
+              
+              {/* Buy Now Button - Only shown if current user is not the owner */}
+              {!isCurrentUserOwner && (
+                <a
+                  href="/payment"
+                  className="bg-[#cc0000] text-white text-lg font-medium py-4 px-8 flex items-center justify-center gap-3 hover:bg-[#aa0000] transition-colors duration-200"
                 >
-                  {isWishlisted ? (
-                    <>
-                      <HeartOff className="w-6 h-6" />
-                      Remove from Wishlist
-                    </>
-                  ) : (
-                    <>
-                      <Heart className="w-6 h-6" />
-                      Add to Wishlist
-                    </>
-                  )}
-                </button>
-
-                {!isCurrentUserOwner && (
-                  <a
-                    href="/payment"
-                    className="flex-1 bg-[#cc0000] text-white text-lg font-medium py-4 px-8 flex items-center justify-center gap-3 hover:bg-[#aa0000] transition-colors duration-200"
-                  >
-                    <ShoppingCart className="w-6 h-6" />
-                    Buy Now
-                  </a>
-                )}
-              </div>
+                  <ShoppingCart className="w-6 h-6" />
+                  Buy Now
+                </a>
+              )}
             </div>
           </div>
         </div>
