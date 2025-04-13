@@ -322,7 +322,7 @@ const Profile = () => {
           </div>
 
           {userProducts.length > 0 ? (
-            <div className="flex flex-wrap mt-6">
+            <div className="">
               {userProducts.map((product) => (
                 <EditProductCard key={product.id} product={product} />
               ))}
@@ -358,7 +358,7 @@ const Profile = () => {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {wishlistItems.map((item) => (
                 <div 
                   key={item.id} 
