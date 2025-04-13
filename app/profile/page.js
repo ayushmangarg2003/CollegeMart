@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/libs/supabase/client";
 import ButtonAccount from "@/components/ButtonAccount";
-import { Loader, Activity, ShoppingBag, Heart } from "lucide-react";
+import { Loader, Activity, ShoppingBag, Heart, Trash2 } from "lucide-react";
 import Link from "next/link";
 import config from "@/config";
 import logo from "@/app/icon.png";
@@ -27,7 +27,7 @@ const Profile = () => {
   const supabase = createClient();
   const [user, setUser] = useState(null);
   const [userProducts, setUserProducts] = useState([]);
-  const [watchlist, setWatchlist] = useState([]); // Keeping this as it is
+  const [wishlistItems, setWishlistItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [productPriceData, setProductPriceData] = useState([]);
@@ -61,6 +61,9 @@ const Profile = () => {
 
         // Generate chart data based on products
         generateChartData(products);
+        
+        // Fetch wishlist items from localStorage
+        fetchWishlistItems();
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err.message);
@@ -71,6 +74,43 @@ const Profile = () => {
 
     fetchUserAndProducts();
   }, [supabase]);
+
+  // Function to fetch wishlist items from localStorage
+  const fetchWishlistItems = () => {
+    try {
+      const wishlistData = localStorage.getItem('wishlist');
+      
+      if (!wishlistData) {
+        setWishlistItems([]);
+        return;
+      }
+      
+      const wishlist = JSON.parse(wishlistData);
+      
+      if (Array.isArray(wishlist)) {
+        setWishlistItems(wishlist);
+      } else {
+        // Reset if not an array
+        localStorage.setItem('wishlist', JSON.stringify([]));
+        setWishlistItems([]);
+      }
+    } catch (error) {
+      console.error("Error fetching wishlist:", error);
+      localStorage.setItem('wishlist', JSON.stringify([]));
+      setWishlistItems([]);
+    }
+  };
+
+  // Function to remove item from wishlist
+  const removeFromWishlist = (productId) => {
+    try {
+      const updatedWishlist = wishlistItems.filter(item => item.id !== productId);
+      localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+      setWishlistItems(updatedWishlist);
+    } catch (error) {
+      console.error("Error removing item from wishlist:", error);
+    }
+  };
 
   // Function to generate chart data from products
   const generateChartData = (products) => {
@@ -111,7 +151,7 @@ const Profile = () => {
       totalsales: totalsales || 0,
       NotalnoOfItems: NotalnoOfItems || 0,
       totalProducts: userProducts.length,
-      watchlistItems: watchlist.length,
+      wishlistItems: wishlistItems.length,
     };
   };
 
@@ -182,9 +222,9 @@ const Profile = () => {
           <div className="bg-white p-4 rounded-lg shadow border">
             <div className="flex items-center mb-2">
               <Heart className="text-red-500 mr-2" size={20} />
-              <h3 className="font-semibold">Watchlist Items</h3>
+              <h3 className="font-semibold">Wishlist Items</h3>
             </div>
-            <p className="text-3xl font-bold">{metrics.watchlistItems}</p>
+            <p className="text-3xl font-bold">{metrics.wishlistItems}</p>
             <p className="text-xs text-neutral-500">Saved Items</p>
           </div>
         </section>
@@ -296,23 +336,91 @@ const Profile = () => {
           )}
         </section>
 
-        {/* Watchlist Section */}
+        {/* Wishlist Section */}
         <section>
-          <h2 className="text-2xl font-semibold text-[#4b4b4b] mb-8 flex items-center">
-            <Heart className="text-[#cc0000] mr-2" size={20} />
-            Your Watchlist
-          </h2>
-          {watchlist.length > 0 ? (
-            <div className="flex flex-wrap mt-6">
-              {watchlist.map((product) => (
-                <EditProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
+          <div className="flex items-center gap-2 mb-8">
+            <Heart className="w-6 h-6 text-[#cc0000]" />
+            <h2 className="text-2xl font-semibold text-[#4b4b4b]">
+              Your Wishlist
+            </h2>
+          </div>
+
+          {wishlistItems.length === 0 ? (
             <div className="text-center py-16 bg-neutral-50">
               <p className="text-lg text-neutral-600">
-                No items in your watchlist yet.
+                Your wishlist is empty
               </p>
+              <Link 
+                href="/marketplace" 
+                className="inline-block bg-[#cc0000] text-white px-6 py-3 font-medium mt-4"
+              >
+                Explore Marketplace
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {wishlistItems.map((item) => (
+                <div 
+                  key={item.id} 
+                  className="border border-neutral-200 hover:shadow-md transition-shadow relative"
+                >
+                  <div className="absolute top-3 right-3 z-10">
+                    <button
+                      onClick={() => removeFromWishlist(item.id)}
+                      className="bg-white p-2 rounded-full shadow-md hover:bg-neutral-100 transition-colors"
+                      aria-label="Remove from wishlist"
+                    >
+                      <Trash2 className="w-5 h-5 text-[#cc0000]" />
+                    </button>
+                  </div>
+                  
+                  <Link href={`/product/${item.id}`}>
+                    <div className="aspect-square bg-neutral-50 relative">
+                      <img
+                        src={item.image || "/placeholder-image.jpg"}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                      {item.originalPrice > item.price && (
+                        <div className="absolute top-3 left-3 bg-[#cc0000] text-white px-3 py-1 text-sm font-medium">
+                          {Math.round((1 - item.price / item.originalPrice) * 100)}% OFF
+                        </div>
+                      )}
+                      {item.condition && (
+                        <div className="absolute bottom-3 left-3 bg-neutral-800 bg-opacity-70 text-white px-3 py-1 text-sm">
+                          {item.condition}
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-4">
+                      <h3 className="font-semibold text-lg text-neutral-800 mb-2">
+                        {item.name}
+                      </h3>
+                      <div className="flex items-baseline gap-3 mb-4">
+                        <span className="text-lg font-bold text-[#cc0000]">
+                          ${item.price?.toLocaleString()}
+                        </span>
+                        {item.originalPrice > item.price && (
+                          <span className="text-sm text-neutral-500 line-through">
+                            ${item.originalPrice?.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="flex justify-end mt-2">
+                        <Link 
+                          href={`/product/${item.id}`}
+                          className="bg-[#cc0000] text-white px-4 py-2 flex items-center gap-2 hover:bg-[#aa0000] transition-colors"
+                        >
+                          <ShoppingBag className="w-4 h-4" />
+                          View Details
+                        </Link>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              ))}
             </div>
           )}
         </section>
