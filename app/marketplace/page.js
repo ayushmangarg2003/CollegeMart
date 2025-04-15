@@ -124,8 +124,7 @@ export default function Marketplace() {
           </div>
         ) : filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            // <ProductCard key={product.id} product={product} />
-            <div className="w-full md:w-1/2 lg:w-1/3 p-4">
+            <div key={product.id} className="w-full md:w-1/2 lg:w-1/3 p-4">
               <div className="group relative bg-white border hover:border-[#cc0000] shadow-md hover:shadow-xl transition-all duration-300">
                 <Link href={`/product/${product.id}`}>
                   <div className="relative aspect-[3/2] overflow-hidden">
