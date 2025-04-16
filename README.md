@@ -1,7 +1,7 @@
 ## Clarkmart - A Marketplace for Clark University Students  
 
 ### 🚀 **Deployment Link:**  
-[clark-amber.vercel.app](https://clark-amber.vercel.app)  
+https://clark-mart-lyart.vercel.app/
 
 ### 📚 **About Clarkmart:**  
 Clarkmart is a simple and intuitive marketplace designed exclusively for Clark University students to buy, sell, and exchange products. Built using **Next.js** and **Supabase**, the platform provides a seamless experience for listing and discovering items within the university community.  
