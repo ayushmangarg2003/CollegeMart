@@ -73,7 +73,8 @@ const AddProductPage = () => {
           phone: phone || null,
           tags: selectedTags.join(","),
           image,
-          listedDate: new Date().toISOString(),
+          listedDate: new Date().toLocaleString("en-US", {
+                      timeZone: "America/New_York"}).toISOString(),
           owner: email,
         },
       ]);
