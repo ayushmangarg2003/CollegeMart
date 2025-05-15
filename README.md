@@ -1,7 +1,7 @@
 ## CollegeMart - A Marketplace for college University Students  
 
 ### 🚀 **Deployment Link:**  
-https://college-mart-lyart.vercel.app/
+https://college-mart-amber.vercel.app/
 
 ### 📚 **About CollegeMart:**  
 CollegeMart is a simple and intuitive marketplace designed exclusively for college University students to buy, sell, and exchange products. Built using **Next.js** and **Supabase**, the platform provides a seamless experience for listing and discovering items within the university community.  
