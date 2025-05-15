@@ -91,8 +91,8 @@ const PrivacyPolicy = () => {
           <h2 className="text-xl font-bold pt-4">8. Contact Us</h2>
           <p>
             If you have any questions or concerns about this Privacy Policy, please contact us at{" "}
-            <a href="mailto:support@clarkmart.com" className="text-blue-500 underline">
-              support@clarkmart.com
+            <a href="mailto:support@CollegeMart.com" className="text-blue-500 underline">
+              support@CollegeMart.com
             </a>
             .
           </p>

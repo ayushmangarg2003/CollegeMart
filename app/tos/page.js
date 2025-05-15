@@ -103,8 +103,8 @@ const TOS = () => {
           <h2 className="text-xl font-bold pt-4">10. Contact Us</h2>
           <p>
             If you have any questions or concerns about these Terms, please contact us at{" "}
-            <a href="mailto:support@clarkmart.com" className="text-blue-500 underline">
-              support@clarkmart.com
+            <a href="mailto:support@CollegeMart.com" className="text-blue-500 underline">
+              support@CollegeMart.com
             </a>
             .
           </p>

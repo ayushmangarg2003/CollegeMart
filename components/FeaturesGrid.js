@@ -96,7 +96,7 @@ const features = [
   },
   {
     title: "Coming Soon : Personalize your site",
-    description: "Customize the website's theme to fit your style, and showcase the unique Clark University community vibe. Coming Soon.",
+    description: "Customize the website's theme to fit your style, and showcase the unique college University community vibe. Coming Soon.",
     styles: "md:col-span-2 bg-base-100 text-base-content",
     demo: (
       <div className="flex left-0 w-full h-full pt-0 lg:pt-8 overflow-hidden -mt-4">
@@ -247,7 +247,7 @@ const FeaturesGrid = () => {
     <section className="flex justify-center items-center w-full bg-base-200/50 text-base-content py-20 lg:py-32">
       <div className="flex flex-col max-w-[82rem] gap-16 md:gap-20 px-4">
         <h2 className="max-w-3xl font-black text-4xl md:text-6xl tracking-[-0.01em]">
-          Clarkmart Features <br /> users{" "}
+          CollegeMart Features <br /> users{" "}
           <span className="underline decoration-dashed underline-offset-8 decoration-base-300">
             really want
           </span>

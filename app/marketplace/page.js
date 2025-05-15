@@ -40,7 +40,7 @@ export default function Marketplace() {
       if (error) {
         console.error("Error fetching products:", error.message);
       } else {
-        console.log("Fetched fresh data:", data);
+        // console.log("Fetched fresh data:", data);
         setProducts(data);
         setFilteredProducts(data);
         localStorage.setItem("cachedProducts", JSON.stringify(data)); // **Update cache**

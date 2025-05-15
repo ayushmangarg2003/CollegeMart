@@ -43,7 +43,7 @@ export default function Login() {
         setIsDisabled(true);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +70,7 @@ export default function Login() {
               Welcome to {config.appName}
             </h1>
             <p className="mt-2 text-gray-600">
-              Sign in with your Clark University email
+              Sign in with your college University email
             </p>
           </div>
 
@@ -81,7 +81,7 @@ export default function Login() {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 text-gray-500 bg-gray-50">
-                CLARKMART
+                CollegeMart
               </span>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function Login() {
                   type="email"
                   value={email}
                   autoComplete="email"
-                  placeholder="tom@clarku.edu"
+                  placeholder="tom@collegeu.edu"
                   className={`
                     w-full px-4 py-3 bg-white border shadow-sm 
                     placeholder:text-gray-400
